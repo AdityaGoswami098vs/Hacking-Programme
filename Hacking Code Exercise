@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hacker Simulator</title>
+    <style>
+        body {
+            background-color: black;
+            color: lime;
+            font-family: monospace;
+            font-size: 18px;
+            padding: 20px;
+            white-space: pre-line;
+
+            margin: 0;
+            /* padding: 0; */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="output"></div>
+
+    <script>
+        const output = document.getElementById("output");
+
+        // Prompt for user input
+        const targetName = prompt("Enter the target's name:").trim();
+
+        // Function to generate usernames using the given name
+        function generateUsername(name) {
+            const endings = ["_123", "2001", ".official", "_fb", "99", ".theone", "xD", "_lol", "007"];
+            const domains = ["@facebook.com", ""];
+            const nameLower = name.toLowerCase();
+            const ending = endings[Math.floor(Math.random() * endings.length)];
+            const domain = domains[Math.floor(Math.random() * domains.length)];
+
+            // Facebook-style: either like email or simple ID
+            if (domain) {
+                return `${nameLower}${ending}${domain}`;
+            } else {
+                return `${nameLower}${ending}`;
+            }
+        }
+
+        const printLine = (text, delay = 2000) => {
+            return new Promise((resolve) => { 
+                let dots = "";
+                const dotInterval = setInterval(() => {
+                    if (dots.length < 3) {
+                        dots += ".";
+                    } else {
+                        dots = "";
+                    }
+                    output.lastChild.textContent = text + dots;
+                }, 400);
+
+                const line = document.createElement("div");
+                line.textContent = text;
+                output.appendChild(line);
+
+                setTimeout(() => {
+                    clearInterval(dotInterval);
+                    line.textContent = text + "...";
+                    resolve();
+                }, delay);
+            });
+        };
+
+        async function startHack() {
+            await printLine("Initializing hacking program");
+            await printLine(`Hacking ${targetName}'s Facebook ID`);
+            await printLine("Username found");
+            await printLine(`His username is ${generateUsername(targetName)}`);
+            await printLine("His Facebook account has been hacked!");
+        }
+
+        startHack();
+    </script>
+</body>
+
+</html>
